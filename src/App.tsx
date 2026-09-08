@@ -344,6 +344,18 @@ export function App() {
             </div>
             <p className="font-medium">{t('footer.copyrightText')}</p>
           </div>
+
+          <p className="text-center text-[11px] sm:text-xs text-[#6E6862]">
+            vibe coded with Gemini 3.7 Flash by{' '}
+            <a
+              href="https://itsjo.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[#C88242] hover:text-[#1B0F0A] underline decoration-[#C88242]/40 underline-offset-2 transition-colors"
+            >
+              itsjo.dev
+            </a>
+          </p>
         </div>
       </footer>
     </div>
