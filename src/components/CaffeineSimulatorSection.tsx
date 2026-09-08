@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SPECIES_EN } from '../data/coffeeData.i18n';
-import { Plus, Trash, Moon, Clock, Sparkle, WarningCircle } from '@phosphor-icons/react';
-
+import { BREW_METHODS } from '../data/coffeeData';
+import { SPECIES_EN, BREW_EN } from '../data/coffeeData.i18n';
+import { Plus, Trash, Moon, Clock, Sparkle, WarningCircle, Scales, Coffee } from '@phosphor-icons/react';
 export interface CoffeeIntake {
   id: string;
   timeHour: number; // 0 - 23 jam
@@ -11,6 +11,7 @@ export interface CoffeeIntake {
   coffeeGrams: number;
   roastLevel: 'light' | 'medium' | 'dark';
   caffeineMg: number;
+  mode: 'custom' | 'template';
 }
 
 export const CaffeineSimulatorSection: React.FC = () => {
@@ -28,6 +29,7 @@ export const CaffeineSimulatorSection: React.FC = () => {
       coffeeGrams: 15,
       roastLevel: 'medium',
       caffeineMg: 180,
+      mode: 'custom',
     },
     {
       id: '2',
@@ -37,6 +39,7 @@ export const CaffeineSimulatorSection: React.FC = () => {
       coffeeGrams: 16,
       roastLevel: 'medium',
       caffeineMg: 192,
+      mode: 'custom',
     },
   ]);
 
@@ -70,6 +73,12 @@ export const CaffeineSimulatorSection: React.FC = () => {
 
     return Math.round(grams * speciesRate * roastFactor);
   };
+  const calculateTemplateCaffeine = (methodId: string, species: CoffeeIntake['species']): number => {
+    const brew = BREW_METHODS.find((b) => b.id === methodId);
+    const baseMg = brew ? brew.defaultCaffeineMg : 90;
+    const speciesMultiplier = species === 'robusta' ? 1.8 : species === 'liberica' ? 0.92 : species === 'excelsa' ? 0.95 : 1.0;
+    return Math.round(baseMg * speciesMultiplier);
+  };
 
   const handleAddIntake = () => {
     const nextHour = intakes.length > 0 ? Math.min(22, Math.max(...intakes.map((i) => i.timeHour)) + 4) : 9;
@@ -82,6 +91,7 @@ export const CaffeineSimulatorSection: React.FC = () => {
       coffeeGrams: defaultGrams,
       roastLevel: 'medium',
       caffeineMg: calculateIntakeCaffeine(defaultGrams, 'arabica', 'medium', 'manual-brew'),
+      mode: 'custom',
     };
     setIntakes([...intakes, newIntake].sort((a, b) => a.timeHour - b.timeHour));
   };
@@ -95,12 +105,16 @@ export const CaffeineSimulatorSection: React.FC = () => {
       intakes.map((item) => {
         if (item.id === id) {
           const updated = { ...item, ...updates };
-          updated.caffeineMg = calculateIntakeCaffeine(
-            updated.coffeeGrams,
-            updated.species,
-            updated.roastLevel,
-            updated.brewMethodId
-          );
+          if ((updated.mode ?? 'custom') === 'template') {
+            updated.caffeineMg = calculateTemplateCaffeine(updated.brewMethodId, updated.species);
+          } else {
+            updated.caffeineMg = calculateIntakeCaffeine(
+              updated.coffeeGrams,
+              updated.species,
+              updated.roastLevel,
+              updated.brewMethodId
+            );
+          }
           return updated;
         }
         return item;
@@ -265,6 +279,52 @@ export const CaffeineSimulatorSection: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* Cup Mode Toggle: Custom Grams vs Café Menu Template */}
+                  <div className="grid grid-cols-2 gap-1 p-1 rounded-lg bg-[#FFFFFF] border border-[#E3DCD2]">
+                    <button
+                      type="button"
+                      onClick={() => handleUpdateIntake(intake.id, { mode: 'custom' })}
+                      className={`py-1.5 px-2 rounded-md text-[11px] font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
+                        (intake.mode ?? 'custom') === 'custom'
+                          ? 'bg-[#2B1810] text-[#F9F6F0] shadow-xs'
+                          : 'text-[#6E6862] hover:bg-[#F0EEE8]'
+                      }`}
+                    >
+                      <Scales size={13} weight="bold" />
+                      <span>{t('simulator.cupModeCustom')}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleUpdateIntake(intake.id, { mode: 'template' })}
+                      className={`py-1.5 px-2 rounded-md text-[11px] font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
+                        (intake.mode ?? 'custom') === 'template'
+                          ? 'bg-[#2B1810] text-[#F9F6F0] shadow-xs'
+                          : 'text-[#6E6862] hover:bg-[#F0EEE8]'
+                      }`}
+                    >
+                      <Coffee size={13} weight="bold" />
+                      <span>{t('simulator.cupModeTemplate')}</span>
+                    </button>
+                  </div>
+
+                  {(intake.mode ?? 'custom') === 'template' ? (
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] uppercase tracking-wider text-[#6E6862] block font-bold">{t('simulator.templateMenuLabel')}</label>
+                      <select
+                        value={intake.brewMethodId}
+                        onChange={(e) => handleUpdateIntake(intake.id, { brewMethodId: e.target.value })}
+                        className="w-full bg-[#FFFFFF] border border-[#E3DCD2] rounded py-1.5 px-2.5 text-xs text-[#1B0F0A] focus:outline-none focus:border-[#C88242]"
+                      >
+                        {BREW_METHODS.map((b) => (
+                          <option key={b.id} value={b.id}>
+                            {langIsEn ? (BREW_EN[b.id]?.name ?? b.name) : b.name} (~{b.defaultCaffeineMg} mg)
+                          </option>
+                        ))}
+                      </select>
+                      <p className="text-[10.5px] text-[#6E6862] leading-snug">{t('simulator.templateHint')}</p>
+                    </div>
+                  ) : (
+                    <>
                   {/* Custom Grams Slider & Input */}
                   <div className="bg-[#FFFFFF] p-3 rounded-lg border border-[#E3DCD2] space-y-2">
                     <div className="flex items-center justify-between">
@@ -321,7 +381,8 @@ export const CaffeineSimulatorSection: React.FC = () => {
                       ))}
                     </div>
                   </div>
-
+                    </>
+                  )}
                   <div className="pt-2.5 border-t border-[#E3DCD2] flex items-center justify-between text-xs font-semibold">
                     <span className="text-[#6E6862] text-[11px]">{t('simulator.intakeResultLabel')}</span>
                     <span className="font-extrabold text-[#C88242] text-sm tnum">~{intake.caffeineMg} mg</span>
