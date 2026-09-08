@@ -388,10 +388,9 @@ export const CaffeineSimulatorSection: React.FC = () => {
               </span>
             </div>
 
-            {/* Interactive SVG Chart */}
             <div className="relative bg-[#F9F6F0] p-5 rounded border border-[#E3DCD2] overflow-hidden">
-              <div className="h-64 sm:h-80 w-full flex items-end">
-                <svg className="w-full h-full overflow-visible" viewBox="0 0 500 200" preserveAspectRatio="none">
+              <div className="w-full aspect-[5/2]">
+                <svg className="w-full h-full overflow-visible block" viewBox="0 0 500 200" preserveAspectRatio="xMidYMid meet">
                   <defs>
                     <linearGradient id="caffeineGradient" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#C88242" stopOpacity="0.20" />
@@ -414,7 +413,7 @@ export const CaffeineSimulatorSection: React.FC = () => {
                     x="6"
                     y={Math.max(12, 200 - (400 / maxTimelineCaffeine) * 200 - 4)}
                     fill="#9E2A2B"
-                    fontSize="10"
+                    fontSize="11"
                     fontWeight="600"
                     className="select-none font-sans"
                   >
@@ -436,7 +435,7 @@ export const CaffeineSimulatorSection: React.FC = () => {
                     x="6"
                     y={200 - (50 / maxTimelineCaffeine) * 200 - 4}
                     fill="#4A6B53"
-                    fontSize="10"
+                    fontSize="11"
                     fontWeight="600"
                     className="select-none font-sans"
                   >
@@ -469,7 +468,7 @@ export const CaffeineSimulatorSection: React.FC = () => {
                               <g key={idx}>
                                 <line x1={x} y1="0" x2={x} y2="200" stroke="#2B1810" strokeWidth="1.5" strokeDasharray="3 3" />
                                 <circle cx={x} cy={y} r="4.5" fill="#2B1810" stroke="#FFFFFF" strokeWidth="2" />
-                                <text x={Math.min(415, x - 26)} y="20" fill="#2B1810" fontSize="10" fontWeight="600" className="select-none font-sans">
+                                <text x={Math.min(415, x - 26)} y="20" fill="#2B1810" fontSize="11" fontWeight="600" className="select-none font-sans">
                                   {t('simulator.bedtimePointText')}
                                 </text>
                               </g>
