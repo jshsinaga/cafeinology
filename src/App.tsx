@@ -24,11 +24,10 @@ export function App() {
   const [userCalculatedCaffeine, setUserCalculatedCaffeine] = useState<number>(180);
 
   return (
-    <div className="min-h-[100dvh] bg-[#F9F6F0] text-[#3A3532] flex flex-col selection:bg-[#C88242]/20 selection:text-[#1B0F0A]">
+    <div className="min-h-[100dvh] bg-[#F9F6F0] text-[#3A3532] flex flex-col overflow-x-clip selection:bg-[#C88242]/20 selection:text-[#1B0F0A]">
       {/* Refined Glass Navbar Header */}
-      <header className="sticky top-0 z-50 bg-[#F9F6F0]/80 backdrop-blur-xl border-b border-[#E3DCD2]/80 transition-all">
-        <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-12 h-16 sm:h-20 flex items-center justify-between gap-4">
-          
+      <header className="sticky top-0 z-50 bg-[#F9F6F0]/80 backdrop-blur-xl border-b border-[#E3DCD2]/80 transition-all overflow-x-clip">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-12 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand Logo & Name */}
           <a href="#" className="flex items-center gap-3 group cursor-pointer shrink-0">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#2B1810] text-[#F9F6F0] flex items-center justify-center shadow-xs group-hover:bg-[#1B0F0A] transition-all duration-200">
@@ -43,7 +42,7 @@ export function App() {
           </a>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-semibold text-[#6E6862] shrink-0">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-semibold text-[#6E6862] shrink-0">
             <a href="#species" className="hover:text-[#2B1810] transition-colors py-1 whitespace-nowrap">{t('nav.species')}</a>
             <a href="#effects" className="hover:text-[#2B1810] transition-colors py-1 whitespace-nowrap">{t('nav.effects')}</a>
             <a href="#converter" className="hover:text-[#2B1810] transition-colors py-1 whitespace-nowrap">{t('nav.converter')}</a>
@@ -52,14 +51,16 @@ export function App() {
           </nav>
 
           {/* Single-line Action CTA & Language Switcher */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 min-w-0">
             <LanguageSwitcher />
             <a
               href="#converter"
-              className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-[#2B1810] hover:bg-[#1B0F0A] text-[#F9F6F0] font-semibold text-xs transition-all shadow-xs flex items-center gap-2 cursor-pointer active:scale-[0.96] whitespace-nowrap"
+              title={t('nav.calculateBtn')}
+              aria-label={t('nav.calculateBtn')}
+              className="p-2.5 sm:px-5 sm:py-2.5 rounded-xl bg-[#2B1810] hover:bg-[#1B0F0A] text-[#F9F6F0] font-semibold text-xs transition-all shadow-xs flex items-center gap-2 cursor-pointer active:scale-[0.96] whitespace-nowrap"
             >
               <Lightning size={14} weight="bold" className="text-[#C88242] shrink-0" />
-              <span className="whitespace-nowrap">{t('nav.calculateBtn')}</span>
+              <span className="hidden sm:inline whitespace-nowrap">{t('nav.calculateBtn')}</span>
             </a>
           </div>
         </div>
@@ -133,21 +134,20 @@ export function App() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap items-center justify-center gap-4 pt-2"
+            className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4 pt-2"
           >
             <a
               href="#simulator"
-              className="group relative px-7 py-4 rounded-xl bg-[#2B1810] hover:bg-[#1B0F0A] text-[#F9F6F0] font-medium text-sm sm:text-base transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-3 cursor-pointer active:scale-[0.96] overflow-hidden"
+              className="group relative px-7 py-4 rounded-xl bg-[#2B1810] hover:bg-[#1B0F0A] text-[#F9F6F0] font-medium text-sm sm:text-base transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-3 cursor-pointer active:scale-[0.96] overflow-hidden w-full sm:w-auto"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-              <Clock size={18} weight="bold" className="text-[#C88242] group-hover:rotate-12 transition-transform duration-200" />
-              <span className="font-semibold">{t('hero.ctaSchedule')}</span>
-              <ArrowDown size={16} weight="bold" className="text-[#C88242] group-hover:translate-y-0.5 transition-transform" />
+              <Clock size={18} weight="bold" className="text-[#C88242] group-hover:rotate-12 transition-transform duration-200 shrink-0" />
+              <span className="font-semibold text-balance">{t('hero.ctaSchedule')}</span>
+              <ArrowDown size={16} weight="bold" className="text-[#C88242] group-hover:translate-y-0.5 transition-transform shrink-0" />
             </a>
 
             <a
               href="#converter"
-              className="px-7 py-4 rounded-xl bg-[#FFFFFF] hover:bg-[#F9F6F0] text-[#2B1810] border-2 border-[#E3DCD2] hover:border-[#C88242] font-semibold text-sm sm:text-base transition-all duration-200 shadow-xs flex items-center gap-2.5 cursor-pointer active:scale-[0.96]"
+              className="px-7 py-4 rounded-xl bg-[#FFFFFF] hover:bg-[#F9F6F0] text-[#2B1810] border-2 border-[#E3DCD2] hover:border-[#C88242] font-semibold text-sm sm:text-base transition-all duration-200 shadow-xs flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.96] w-full sm:w-auto"
             >
               <Scales size={18} weight="bold" className="text-[#C88242]" />
               <span>{t('hero.ctaConverter')}</span>

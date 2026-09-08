@@ -34,8 +34,8 @@ export const CoffeeSpeciesSection: React.FC<CoffeeSpeciesProps> = ({
           </p>
         </div>
 
-        {/* 4 Species Grid with Real Photography & Precision Archival Tiles */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
+        {/* 4 Species Cards: Horizontal Snap Scroll on Mobile, Grid on Desktop */}
+        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-10 sm:mb-14 overflow-x-auto sm:overflow-visible pb-2 sm:pb-0 -mx-6 px-6 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {speciesList.map((item) => {
             const isSelected = item.id === selectedSpeciesId;
             const displayName = langIsEn ? (SPECIES_EN[item.id]?.name ?? item.name) : item.name;
@@ -44,13 +44,13 @@ export const CoffeeSpeciesSection: React.FC<CoffeeSpeciesProps> = ({
               <button
                 key={item.id}
                 onClick={() => onSelectSpecies(item.id)}
-                className={`group text-left rounded border transition-all duration-200 cursor-pointer overflow-hidden flex flex-col justify-between active:scale-[0.96] ${
+                className={`group text-left rounded-xl sm:rounded border transition-all duration-200 cursor-pointer overflow-hidden flex flex-col justify-between shrink-0 w-[172px] sm:w-auto snap-start active:scale-[0.96] ${
                   isSelected
                     ? 'bg-[#FFFFFF] border-[#C88242] shadow-sm ring-1 ring-[#C88242]'
                     : 'bg-[#FFFFFF] border-[#E3DCD2] hover:border-[#C88242]/50 hover:shadow-xs'
                 }`}
               >
-                <div className="relative h-40 w-full overflow-hidden bg-[#F9F6F0]">
+                <div className="relative h-24 sm:h-40 w-full overflow-hidden bg-[#F9F6F0]">
                   <img
                     src={item.imageUrl}
                     alt={displayName}
@@ -58,8 +58,8 @@ export const CoffeeSpeciesSection: React.FC<CoffeeSpeciesProps> = ({
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 ring-1 ring-inset ring-black/10 pointer-events-none" />
-                  <div className="absolute top-3.5 right-3.5">
-                    <span className={`text-[11px] px-2.5 py-0.5 rounded-full font-bold tnum shadow-xs ${
+                  <div className="absolute top-2 sm:top-3.5 right-2 sm:right-3.5">
+                    <span className={`text-[10px] sm:text-[11px] px-2 sm:px-2.5 py-0.5 rounded-full font-bold tnum shadow-xs ${
                       item.id === 'robusta' 
                         ? 'bg-[#9E2A2B] text-[#FFFFFF]'
                         : 'bg-[#FFFFFF]/90 text-[#2B1810] border border-[#E3DCD2]'
@@ -69,18 +69,18 @@ export const CoffeeSpeciesSection: React.FC<CoffeeSpeciesProps> = ({
                   </div>
                 </div>
 
-                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                <div className="p-3 sm:p-6 flex-1 flex flex-col justify-between gap-2 sm:gap-0 sm:space-y-4">
                   <div>
-                    <span className="text-[11px] text-[#6E6862] italic block mb-1 font-serif">
+                    <span className="hidden sm:block text-[11px] text-[#6E6862] italic mb-1 font-serif">
                       {item.latinName}
                     </span>
-                    <h3 className="text-xl font-bold font-serif text-[#1B0F0A] mb-1.5">{displayName}</h3>
-                    <p className="text-xs sm:text-[13px] text-[#6E6862] line-clamp-2 leading-relaxed">{displayDesc}</p>
+                    <h3 className="text-base sm:text-xl font-bold font-serif text-[#1B0F0A] sm:mb-1.5 whitespace-nowrap">{displayName}</h3>
+                    <p className="hidden sm:block text-xs sm:text-[13px] text-[#6E6862] line-clamp-2 leading-relaxed">{displayDesc}</p>
                   </div>
                   
-                  <div className="pt-3.5 border-t border-[#E3DCD2] flex items-center justify-between text-xs">
-                    <span className="text-[#6E6862] text-[11.5px] font-medium">{t('species.average')}</span>
-                    <span className="font-bold text-[#C88242] tnum">{item.mgPerGram.avg} mg / g</span>
+                  <div className="pt-2 sm:pt-3.5 border-t border-[#E3DCD2] flex items-center justify-between text-xs">
+                    <span className="text-[#6E6862] text-[10.5px] sm:text-[11.5px] font-medium">{t('species.average')}</span>
+                    <span className="font-bold text-[#C88242] tnum text-[11px] sm:text-xs">{item.mgPerGram.avg} mg/g</span>
                   </div>
                 </div>
               </button>
